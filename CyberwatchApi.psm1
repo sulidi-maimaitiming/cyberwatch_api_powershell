@@ -13,7 +13,7 @@ Function SendApiRequest
         Your Cyberwatch instance base url
 #>
 Param    (
-    [PARAMETER(Mandatory=$true)][string]$api_url = 'https://cyberwatch.local',
+    [PARAMETER(Mandatory=$true)][string]$api_url = 'https://localhost',
     [PARAMETER(Mandatory=$true)][string]$api_key,
     [PARAMETER(Mandatory=$true)][string]$secret_key,
     [PARAMETER(Mandatory=$true)][string]$http_method = 'GET',
@@ -59,7 +59,7 @@ Param    (
 Function SendApiRequestPagination
 {
 Param    (
-    [PARAMETER(Mandatory=$true)][string]$api_url = 'https://cyberwatch.local',
+    [PARAMETER(Mandatory=$true)][string]$api_url = 'https://localhost',
     [PARAMETER(Mandatory=$true)][string]$api_key,
     [PARAMETER(Mandatory=$true)][string]$secret_key,
     [PARAMETER(Mandatory=$true)][string]$http_method = 'GET',
@@ -151,6 +151,26 @@ Class CbwApiClient {
     [object] server_schedule_updates([string]$id, [Object]$content)
     {
         return $this.request('POST', "/api/v3/servers/${id}/updates", $content)
+    }
+
+    [object] agents()
+    {
+        return $this.resquest_paginatino('GET', '/api/v3/agents')
+    }
+
+    [object] agents([Object]$filters)
+    {
+        return $this.request_pagination('GET', '/api/v3/agents', $filters)
+    }
+
+    [object] agent([string]$id)
+    {
+        return $this.request('GET', "/api/v3/agents/${id}")
+    }
+
+    [object] delete_agent([string]$id)
+    {
+        return $this.request('DELETE', "/api/v3/agents/${id}")
     }
 
     [object] remote_accesses()
